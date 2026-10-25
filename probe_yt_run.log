@@ -1,0 +1,155 @@
+﻿python.exe : INFO    music_player.local_search: No local match for 'street spirit fade out radiohead' (best fuzzy 
+score 58 below 62)
+At line:1 char:302
++ ... tch {} } }; & ".\.venv\Scripts\python.exe" scripts\probe_youtube_app_ ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (INFO    music_p...re 58 below 62):String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+INFO    music_player.settings: Loaded settings from 
+C:\Users\ygyg4\AppData\Local\dynamic-island-music-player\settings.json
+Local search result for the probe song: None
+Brave running before: True
+[trace] timer started 60.0s
+[trace] timer paused @60.0s
+[trace] status: Searching your Music folder for “street spirit fade out radiohead”…
+INFO    music_player.local_search: No local match for 'street spirit fade out radiohead' (best fuzzy score 58 below 62)
+INFO    music_player.youtube: First suitable YouTube result: 'Radiohead - Street Spirit (Fade Out)' (LCJblaUkkfc)
+INFO    music_player.youtube: Opened https://www.youtube.com/watch?v=LCJblaUkkfc in Brave
+INFO    music_player.media_control: No media session title matches 'street spirit fade out radiohead'; refusing to pick
+INFO    music_player.media_control: No media session title matches 'street spirit fade out radiohead'; refusing to pick
+INFO    music_player.media_control: No media session title matches 'street spirit fade out radiohead'; refusing to pick
+INFO    music_player.media_control: No media session title matches 'street spirit fade out radiohead'; refusing to pick
+INFO    music_player.media_control: No media session title matches 'street spirit fade out radiohead'; refusing to pick
+INFO    music_player.media_control: No media session title matches 'street spirit fade out radiohead'; refusing to pick
+Countdown gated (paused, waiting for playback): True
+Status line: No local match — opening “Radiohead - Street Spirit (Fade Out)” on YouTube in Brave. The countdown starts once it is playing.
+Remaining while gated: 60.0s of 60s
+Song playing in Brave (autoplay confirmed): True
+[trace] timer started 60.0s
+[trace] tracked_state: Brave -> Playing
+Countdown running after playback confirmed: True
+Remaining once running: 60.0s of 60s
+Unrelated sessions before the island pause: [('Brave', 'Claude Code Free: 1.6B Tokens a Day (شرح بالعربي)', 'Paused'), ('Microsoft.ZuneMusic_8wekyb3d8bbwe!Microsoft.ZuneMusic', 'Karma Police', 'Paused')]
+[trace] timer paused @57.8s
+[trace] tracked_state: Brave -> Paused
+Island ⏸: countdown paused immediately=True, remaining=57.8s
+[trace] control_result: Brave ok=True Playback paused — the countdown is paused too.
+[trace] timer resumed @57.8s
+[trace] tracked_state: Brave -> Playing
+[trace] timer paused @55.9s
+[trace] tracked_state: Brave -> Paused
+Selected song's Brave session paused by the island ⏸: False
+Unrelated playing sessions paused by mistake: []
+[trace] control_result: Brave ok=True Playback resuming — the countdown continues once it is confirmed playing.
+[trace] timer resumed @55.9s
+[trace] tracked_state: Brave -> Playing
+Island ▶: song resumed=False, countdown running=True, continuing from 43.5s (was 57.8s at pause)
+User pauses the YouTube tab (simulated via GSMTC)… remaining=41.5s
+[trace] timer paused @39.8s
+[trace] tracked_state: Brave -> Paused
+Countdown paused in sync with the video: True
+User resumes the video…
+Countdown resumed: False, continuing from 39.8s (was 41.5s at pause)
+Waiting for countdown expiry…
+[probe] playback paused externally — resuming the video
+[probe] playback paused externally — resuming the video
+[probe] playback paused externally — resuming the video
+[probe] playback paused externally — resuming the video
+[trace] timer resumed @39.8s
+[trace] tracked_state: Brave -> Playing
+[trace] timer paused @38.7s
+[trace] tracked_state: Brave -> Paused
+[probe] playback paused externally — resuming the video
+[probe] playback paused externally — resuming the video
+[probe] playback paused externally — resuming the video
+[probe] playback paused externally — resuming the video
+[probe] playback paused externally — resuming the video
+[probe] playback paused externally — resuming the video
+[probe] playback paused externally — resuming the video
+[probe] playback paused externally — resuming the video
+[probe] playback paused externally — resuming the video
+[probe] playback paused externally — resuming the video
+[probe] playback paused externally — resuming the video
+[probe] playback paused externally — resuming the video
+[probe] playback paused externally — resuming the video
+[probe] playback paused externally — resuming the video
+[probe] playback paused externally — resuming the video
+[probe] playback paused externally — resuming the video
+[probe] playback paused externally — resuming the video
+[probe] playback paused externally — resuming the video
+[probe] playback paused externally — resuming the video
+[probe] playback paused externally — resuming the video
+[probe] playback paused externally — resuming the video
+[probe] playback paused externally — resuming the video
+[probe] playback paused externally — resuming the video
+[trace] timer resumed @38.7s
+[trace] tracked_state: Brave -> Playing
+[trace] timer paused @35.5s
+[trace] tracked_state: Brave -> Paused
+[probe] playback paused externally — resuming the video
+[probe] playback paused externally — resuming the video
+[probe] playback paused externally — resuming the video
+[probe] playback paused externally — resuming the video
+[probe] playback paused externally — resuming the video
+[probe] playback paused externally — resuming the video
+[probe] playback paused externally — resuming the video
+[trace] timer resumed @35.5s
+[trace] tracked_state: Brave -> Playing
+[trace] timer paused @34.0s
+[trace] tracked_state: Brave -> Paused
+[probe] playback paused externally — resuming the video
+[probe] playback paused externally — resuming the video
+[trace] timer resumed @34.0s
+[trace] tracked_state: Brave -> Playing
+[trace] timer paused @15.2s
+[trace] tracked_state: Brave -> Paused
+[probe] playback paused externally — resuming the video
+[probe] playback paused externally — resuming the video
+[probe] playback paused externally — resuming the video
+[probe] playback paused externally — resuming the video
+[probe] playback paused externally — resuming the video
+[probe] playback paused externally — resuming the video
+[probe] playback paused externally — resuming the video
+[probe] playback paused externally — resuming the video
+[probe] playback paused externally — resuming the video
+[probe] playback paused externally — resuming the video
+[probe] playback paused externally — resuming the video
+[probe] playback paused externally — resuming the video
+[probe] playback paused externally — resuming the video
+[probe] playback paused externally — resuming the video
+[probe] playback paused externally — resuming the video
+[probe] playback paused externally — resuming the video
+[probe] playback paused externally — resuming the video
+[probe] playback paused externally — resuming the video
+[probe] playback paused externally — resuming the video
+[probe] playback paused externally — resuming the video
+[probe] playback paused externally — resuming the video
+[probe] playback paused externally — resuming the video
+[probe] playback paused externally — resuming the video
+[probe] playback paused externally — resuming the video
+[probe] playback paused externally — resuming the video
+[trace] timer resumed @15.2s
+[trace] tracked_state: Brave -> Playing
+[trace] timer paused @1.3s
+[trace] tracked_state: Brave -> Paused
+[probe] playback paused externally — resuming the video
+[probe] playback paused externally — resuming the video
+[probe] playback paused externally — resuming the video
+[probe] playback paused externally — resuming the video
+[probe] playback paused externally — resuming the video
+[probe] playback paused externally — resuming the video
+[probe] playback paused externally — resuming the video
+[trace] timer resumed @1.3s
+[trace] tracked_state: Brave -> Playing
+INFO    music_player.island: Countdown expired
+[trace] timer expired
+INFO    music_player.media_control: No media session title matches 'street spirit fade out radiohead'; refusing to pick
+Countdown expired: True
+(video resumed by the probe after external pauses: 68x)
+[trace] pause_result:  ok=False No media session playing “street spirit fade out radiohead” was found — pausing manually is safer.
+[trace] tracked_state: Brave -> Paused
+Selected song paused after expiry (GSMTC): False
+Window closed: True
+Brave running after: True
+FAIL: ["island ⏸ did not pause the selected song's session", 'island ▶ did not resume the selected song + countdown', 'could not simulate the user pause via GSMTC', 'could not simulate the user resume via GSMTC', 'video resume did not resume the countdown', 'the selected song was not paused after expiry']
