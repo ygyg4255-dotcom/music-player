@@ -1,4 +1,4 @@
-"""Dynamic Island Music Player package.
+"""Player Music package.
 
 A compact, always-on-top floating music timer for Windows:
 

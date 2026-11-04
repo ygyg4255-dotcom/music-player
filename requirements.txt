@@ -1,4 +1,4 @@
-# Runtime dependencies for the Dynamic Island Music Player.
+# Runtime dependencies for the Player Music application.
 # Python 3.13 on Windows.
 PySide6>=6.8
 # Fuzzy song-title matching against local files (phase 3).

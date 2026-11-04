@@ -1,16 +1,12 @@
-('C:\\Users\\ygyg4\\OneDrive\\Desktop\\music '
- 'player\\build\\DynamicIslandMusicPlayer\\PYZ-00.pyz',
+('C:\\Users\\ygyg4\\music-player\\build\\PlayerMusic\\PYZ-00.pyz',
  [('PySide6',
-   'C:\\Users\\ygyg4\\OneDrive\\Desktop\\music '
-   'player\\.venv\\Lib\\site-packages\\PySide6\\__init__.py',
+   'C:\\Users\\ygyg4\\music-player\\.venv\\Lib\\site-packages\\PySide6\\__init__.py',
    'PYMODULE'),
   ('PySide6.support',
-   'C:\\Users\\ygyg4\\OneDrive\\Desktop\\music '
-   'player\\.venv\\Lib\\site-packages\\PySide6\\support\\__init__.py',
+   'C:\\Users\\ygyg4\\music-player\\.venv\\Lib\\site-packages\\PySide6\\support\\__init__.py',
    'PYMODULE'),
   ('PySide6.support.deprecated',
-   'C:\\Users\\ygyg4\\OneDrive\\Desktop\\music '
-   'player\\.venv\\Lib\\site-packages\\PySide6\\support\\deprecated.py',
+   'C:\\Users\\ygyg4\\music-player\\.venv\\Lib\\site-packages\\PySide6\\support\\deprecated.py',
    'PYMODULE'),
   ('__future__',
    'C:\\Users\\ygyg4\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\__future__.py',
@@ -40,12 +36,10 @@
    'C:\\Users\\ygyg4\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\_pydecimal.py',
    'PYMODULE'),
   ('_pyi_rth_utils',
-   'C:\\Users\\ygyg4\\OneDrive\\Desktop\\music '
-   'player\\.venv\\Lib\\site-packages\\PyInstaller\\fake-modules\\_pyi_rth_utils\\__init__.py',
+   'C:\\Users\\ygyg4\\music-player\\.venv\\Lib\\site-packages\\PyInstaller\\fake-modules\\_pyi_rth_utils\\__init__.py',
    'PYMODULE'),
   ('_pyi_rth_utils.qt',
-   'C:\\Users\\ygyg4\\OneDrive\\Desktop\\music '
-   'player\\.venv\\Lib\\site-packages\\PyInstaller\\fake-modules\\_pyi_rth_utils\\qt.py',
+   'C:\\Users\\ygyg4\\music-player\\.venv\\Lib\\site-packages\\PyInstaller\\fake-modules\\_pyi_rth_utils\\qt.py',
    'PYMODULE'),
   ('_strptime',
    'C:\\Users\\ygyg4\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\_strptime.py',
@@ -474,64 +468,49 @@
    'C:\\Users\\ygyg4\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\multiprocessing\\util.py',
    'PYMODULE'),
   ('music_player',
-   'C:\\Users\\ygyg4\\OneDrive\\Desktop\\music '
-   'player\\src\\music_player\\__init__.py',
+   'C:\\Users\\ygyg4\\music-player\\src\\music_player\\__init__.py',
    'PYMODULE'),
   ('music_player.app',
-   'C:\\Users\\ygyg4\\OneDrive\\Desktop\\music '
-   'player\\src\\music_player\\app.py',
+   'C:\\Users\\ygyg4\\music-player\\src\\music_player\\app.py',
    'PYMODULE'),
   ('music_player.config',
-   'C:\\Users\\ygyg4\\OneDrive\\Desktop\\music '
-   'player\\src\\music_player\\config.py',
+   'C:\\Users\\ygyg4\\music-player\\src\\music_player\\config.py',
    'PYMODULE'),
   ('music_player.island',
-   'C:\\Users\\ygyg4\\OneDrive\\Desktop\\music '
-   'player\\src\\music_player\\island.py',
+   'C:\\Users\\ygyg4\\music-player\\src\\music_player\\island.py',
    'PYMODULE'),
   ('music_player.local_search',
-   'C:\\Users\\ygyg4\\OneDrive\\Desktop\\music '
-   'player\\src\\music_player\\local_search.py',
+   'C:\\Users\\ygyg4\\music-player\\src\\music_player\\local_search.py',
    'PYMODULE'),
   ('music_player.media_control',
-   'C:\\Users\\ygyg4\\OneDrive\\Desktop\\music '
-   'player\\src\\music_player\\media_control.py',
+   'C:\\Users\\ygyg4\\music-player\\src\\music_player\\media_control.py',
    'PYMODULE'),
   ('music_player.playback',
-   'C:\\Users\\ygyg4\\OneDrive\\Desktop\\music '
-   'player\\src\\music_player\\playback\\__init__.py',
+   'C:\\Users\\ygyg4\\music-player\\src\\music_player\\playback\\__init__.py',
    'PYMODULE'),
   ('music_player.playback.base',
-   'C:\\Users\\ygyg4\\OneDrive\\Desktop\\music '
-   'player\\src\\music_player\\playback\\base.py',
+   'C:\\Users\\ygyg4\\music-player\\src\\music_player\\playback\\base.py',
    'PYMODULE'),
   ('music_player.playback.local',
-   'C:\\Users\\ygyg4\\OneDrive\\Desktop\\music '
-   'player\\src\\music_player\\playback\\local.py',
+   'C:\\Users\\ygyg4\\music-player\\src\\music_player\\playback\\local.py',
    'PYMODULE'),
   ('music_player.playback.orchestrator',
-   'C:\\Users\\ygyg4\\OneDrive\\Desktop\\music '
-   'player\\src\\music_player\\playback\\orchestrator.py',
+   'C:\\Users\\ygyg4\\music-player\\src\\music_player\\playback\\orchestrator.py',
    'PYMODULE'),
   ('music_player.settings',
-   'C:\\Users\\ygyg4\\OneDrive\\Desktop\\music '
-   'player\\src\\music_player\\settings.py',
+   'C:\\Users\\ygyg4\\music-player\\src\\music_player\\settings.py',
    'PYMODULE'),
   ('music_player.startup',
-   'C:\\Users\\ygyg4\\OneDrive\\Desktop\\music '
-   'player\\src\\music_player\\startup.py',
+   'C:\\Users\\ygyg4\\music-player\\src\\music_player\\startup.py',
    'PYMODULE'),
   ('music_player.theme',
-   'C:\\Users\\ygyg4\\OneDrive\\Desktop\\music '
-   'player\\src\\music_player\\theme.py',
+   'C:\\Users\\ygyg4\\music-player\\src\\music_player\\theme.py',
    'PYMODULE'),
   ('music_player.timer',
-   'C:\\Users\\ygyg4\\OneDrive\\Desktop\\music '
-   'player\\src\\music_player\\timer.py',
+   'C:\\Users\\ygyg4\\music-player\\src\\music_player\\timer.py',
    'PYMODULE'),
   ('music_player.youtube',
-   'C:\\Users\\ygyg4\\OneDrive\\Desktop\\music '
-   'player\\src\\music_player\\youtube.py',
+   'C:\\Users\\ygyg4\\music-player\\src\\music_player\\youtube.py',
    'PYMODULE'),
   ('netrc',
    'C:\\Users\\ygyg4\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\netrc.py',
@@ -579,144 +558,109 @@
    'C:\\Users\\ygyg4\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\random.py',
    'PYMODULE'),
   ('rapidfuzz',
-   'C:\\Users\\ygyg4\\OneDrive\\Desktop\\music '
-   'player\\.venv\\Lib\\site-packages\\rapidfuzz\\__init__.py',
+   'C:\\Users\\ygyg4\\music-player\\.venv\\Lib\\site-packages\\rapidfuzz\\__init__.py',
    'PYMODULE'),
   ('rapidfuzz._common_py',
-   'C:\\Users\\ygyg4\\OneDrive\\Desktop\\music '
-   'player\\.venv\\Lib\\site-packages\\rapidfuzz\\_common_py.py',
+   'C:\\Users\\ygyg4\\music-player\\.venv\\Lib\\site-packages\\rapidfuzz\\_common_py.py',
    'PYMODULE'),
   ('rapidfuzz._feature_detector',
-   'C:\\Users\\ygyg4\\OneDrive\\Desktop\\music '
-   'player\\.venv\\Lib\\site-packages\\rapidfuzz\\_feature_detector.py',
+   'C:\\Users\\ygyg4\\music-player\\.venv\\Lib\\site-packages\\rapidfuzz\\_feature_detector.py',
    'PYMODULE'),
   ('rapidfuzz._utils',
-   'C:\\Users\\ygyg4\\OneDrive\\Desktop\\music '
-   'player\\.venv\\Lib\\site-packages\\rapidfuzz\\_utils.py',
+   'C:\\Users\\ygyg4\\music-player\\.venv\\Lib\\site-packages\\rapidfuzz\\_utils.py',
    'PYMODULE'),
   ('rapidfuzz.distance',
-   'C:\\Users\\ygyg4\\OneDrive\\Desktop\\music '
-   'player\\.venv\\Lib\\site-packages\\rapidfuzz\\distance\\__init__.py',
+   'C:\\Users\\ygyg4\\music-player\\.venv\\Lib\\site-packages\\rapidfuzz\\distance\\__init__.py',
    'PYMODULE'),
   ('rapidfuzz.distance.DamerauLevenshtein',
-   'C:\\Users\\ygyg4\\OneDrive\\Desktop\\music '
-   'player\\.venv\\Lib\\site-packages\\rapidfuzz\\distance\\DamerauLevenshtein.py',
+   'C:\\Users\\ygyg4\\music-player\\.venv\\Lib\\site-packages\\rapidfuzz\\distance\\DamerauLevenshtein.py',
    'PYMODULE'),
   ('rapidfuzz.distance.DamerauLevenshtein_py',
-   'C:\\Users\\ygyg4\\OneDrive\\Desktop\\music '
-   'player\\.venv\\Lib\\site-packages\\rapidfuzz\\distance\\DamerauLevenshtein_py.py',
+   'C:\\Users\\ygyg4\\music-player\\.venv\\Lib\\site-packages\\rapidfuzz\\distance\\DamerauLevenshtein_py.py',
    'PYMODULE'),
   ('rapidfuzz.distance.Hamming',
-   'C:\\Users\\ygyg4\\OneDrive\\Desktop\\music '
-   'player\\.venv\\Lib\\site-packages\\rapidfuzz\\distance\\Hamming.py',
+   'C:\\Users\\ygyg4\\music-player\\.venv\\Lib\\site-packages\\rapidfuzz\\distance\\Hamming.py',
    'PYMODULE'),
   ('rapidfuzz.distance.Hamming_py',
-   'C:\\Users\\ygyg4\\OneDrive\\Desktop\\music '
-   'player\\.venv\\Lib\\site-packages\\rapidfuzz\\distance\\Hamming_py.py',
+   'C:\\Users\\ygyg4\\music-player\\.venv\\Lib\\site-packages\\rapidfuzz\\distance\\Hamming_py.py',
    'PYMODULE'),
   ('rapidfuzz.distance.Indel',
-   'C:\\Users\\ygyg4\\OneDrive\\Desktop\\music '
-   'player\\.venv\\Lib\\site-packages\\rapidfuzz\\distance\\Indel.py',
+   'C:\\Users\\ygyg4\\music-player\\.venv\\Lib\\site-packages\\rapidfuzz\\distance\\Indel.py',
    'PYMODULE'),
   ('rapidfuzz.distance.Indel_py',
-   'C:\\Users\\ygyg4\\OneDrive\\Desktop\\music '
-   'player\\.venv\\Lib\\site-packages\\rapidfuzz\\distance\\Indel_py.py',
+   'C:\\Users\\ygyg4\\music-player\\.venv\\Lib\\site-packages\\rapidfuzz\\distance\\Indel_py.py',
    'PYMODULE'),
   ('rapidfuzz.distance.Jaro',
-   'C:\\Users\\ygyg4\\OneDrive\\Desktop\\music '
-   'player\\.venv\\Lib\\site-packages\\rapidfuzz\\distance\\Jaro.py',
+   'C:\\Users\\ygyg4\\music-player\\.venv\\Lib\\site-packages\\rapidfuzz\\distance\\Jaro.py',
    'PYMODULE'),
   ('rapidfuzz.distance.JaroWinkler',
-   'C:\\Users\\ygyg4\\OneDrive\\Desktop\\music '
-   'player\\.venv\\Lib\\site-packages\\rapidfuzz\\distance\\JaroWinkler.py',
+   'C:\\Users\\ygyg4\\music-player\\.venv\\Lib\\site-packages\\rapidfuzz\\distance\\JaroWinkler.py',
    'PYMODULE'),
   ('rapidfuzz.distance.JaroWinkler_py',
-   'C:\\Users\\ygyg4\\OneDrive\\Desktop\\music '
-   'player\\.venv\\Lib\\site-packages\\rapidfuzz\\distance\\JaroWinkler_py.py',
+   'C:\\Users\\ygyg4\\music-player\\.venv\\Lib\\site-packages\\rapidfuzz\\distance\\JaroWinkler_py.py',
    'PYMODULE'),
   ('rapidfuzz.distance.Jaro_py',
-   'C:\\Users\\ygyg4\\OneDrive\\Desktop\\music '
-   'player\\.venv\\Lib\\site-packages\\rapidfuzz\\distance\\Jaro_py.py',
+   'C:\\Users\\ygyg4\\music-player\\.venv\\Lib\\site-packages\\rapidfuzz\\distance\\Jaro_py.py',
    'PYMODULE'),
   ('rapidfuzz.distance.LCSseq',
-   'C:\\Users\\ygyg4\\OneDrive\\Desktop\\music '
-   'player\\.venv\\Lib\\site-packages\\rapidfuzz\\distance\\LCSseq.py',
+   'C:\\Users\\ygyg4\\music-player\\.venv\\Lib\\site-packages\\rapidfuzz\\distance\\LCSseq.py',
    'PYMODULE'),
   ('rapidfuzz.distance.LCSseq_py',
-   'C:\\Users\\ygyg4\\OneDrive\\Desktop\\music '
-   'player\\.venv\\Lib\\site-packages\\rapidfuzz\\distance\\LCSseq_py.py',
+   'C:\\Users\\ygyg4\\music-player\\.venv\\Lib\\site-packages\\rapidfuzz\\distance\\LCSseq_py.py',
    'PYMODULE'),
   ('rapidfuzz.distance.Levenshtein',
-   'C:\\Users\\ygyg4\\OneDrive\\Desktop\\music '
-   'player\\.venv\\Lib\\site-packages\\rapidfuzz\\distance\\Levenshtein.py',
+   'C:\\Users\\ygyg4\\music-player\\.venv\\Lib\\site-packages\\rapidfuzz\\distance\\Levenshtein.py',
    'PYMODULE'),
   ('rapidfuzz.distance.Levenshtein_py',
-   'C:\\Users\\ygyg4\\OneDrive\\Desktop\\music '
-   'player\\.venv\\Lib\\site-packages\\rapidfuzz\\distance\\Levenshtein_py.py',
+   'C:\\Users\\ygyg4\\music-player\\.venv\\Lib\\site-packages\\rapidfuzz\\distance\\Levenshtein_py.py',
    'PYMODULE'),
   ('rapidfuzz.distance.OSA',
-   'C:\\Users\\ygyg4\\OneDrive\\Desktop\\music '
-   'player\\.venv\\Lib\\site-packages\\rapidfuzz\\distance\\OSA.py',
+   'C:\\Users\\ygyg4\\music-player\\.venv\\Lib\\site-packages\\rapidfuzz\\distance\\OSA.py',
    'PYMODULE'),
   ('rapidfuzz.distance.OSA_py',
-   'C:\\Users\\ygyg4\\OneDrive\\Desktop\\music '
-   'player\\.venv\\Lib\\site-packages\\rapidfuzz\\distance\\OSA_py.py',
+   'C:\\Users\\ygyg4\\music-player\\.venv\\Lib\\site-packages\\rapidfuzz\\distance\\OSA_py.py',
    'PYMODULE'),
   ('rapidfuzz.distance.Postfix',
-   'C:\\Users\\ygyg4\\OneDrive\\Desktop\\music '
-   'player\\.venv\\Lib\\site-packages\\rapidfuzz\\distance\\Postfix.py',
+   'C:\\Users\\ygyg4\\music-player\\.venv\\Lib\\site-packages\\rapidfuzz\\distance\\Postfix.py',
    'PYMODULE'),
   ('rapidfuzz.distance.Postfix_py',
-   'C:\\Users\\ygyg4\\OneDrive\\Desktop\\music '
-   'player\\.venv\\Lib\\site-packages\\rapidfuzz\\distance\\Postfix_py.py',
+   'C:\\Users\\ygyg4\\music-player\\.venv\\Lib\\site-packages\\rapidfuzz\\distance\\Postfix_py.py',
    'PYMODULE'),
   ('rapidfuzz.distance.Prefix',
-   'C:\\Users\\ygyg4\\OneDrive\\Desktop\\music '
-   'player\\.venv\\Lib\\site-packages\\rapidfuzz\\distance\\Prefix.py',
+   'C:\\Users\\ygyg4\\music-player\\.venv\\Lib\\site-packages\\rapidfuzz\\distance\\Prefix.py',
    'PYMODULE'),
   ('rapidfuzz.distance.Prefix_py',
-   'C:\\Users\\ygyg4\\OneDrive\\Desktop\\music '
-   'player\\.venv\\Lib\\site-packages\\rapidfuzz\\distance\\Prefix_py.py',
+   'C:\\Users\\ygyg4\\music-player\\.venv\\Lib\\site-packages\\rapidfuzz\\distance\\Prefix_py.py',
    'PYMODULE'),
   ('rapidfuzz.distance._initialize',
-   'C:\\Users\\ygyg4\\OneDrive\\Desktop\\music '
-   'player\\.venv\\Lib\\site-packages\\rapidfuzz\\distance\\_initialize.py',
+   'C:\\Users\\ygyg4\\music-player\\.venv\\Lib\\site-packages\\rapidfuzz\\distance\\_initialize.py',
    'PYMODULE'),
   ('rapidfuzz.distance._initialize_py',
-   'C:\\Users\\ygyg4\\OneDrive\\Desktop\\music '
-   'player\\.venv\\Lib\\site-packages\\rapidfuzz\\distance\\_initialize_py.py',
+   'C:\\Users\\ygyg4\\music-player\\.venv\\Lib\\site-packages\\rapidfuzz\\distance\\_initialize_py.py',
    'PYMODULE'),
   ('rapidfuzz.distance.metrics_py',
-   'C:\\Users\\ygyg4\\OneDrive\\Desktop\\music '
-   'player\\.venv\\Lib\\site-packages\\rapidfuzz\\distance\\metrics_py.py',
+   'C:\\Users\\ygyg4\\music-player\\.venv\\Lib\\site-packages\\rapidfuzz\\distance\\metrics_py.py',
    'PYMODULE'),
   ('rapidfuzz.fuzz',
-   'C:\\Users\\ygyg4\\OneDrive\\Desktop\\music '
-   'player\\.venv\\Lib\\site-packages\\rapidfuzz\\fuzz.py',
+   'C:\\Users\\ygyg4\\music-player\\.venv\\Lib\\site-packages\\rapidfuzz\\fuzz.py',
    'PYMODULE'),
   ('rapidfuzz.fuzz_py',
-   'C:\\Users\\ygyg4\\OneDrive\\Desktop\\music '
-   'player\\.venv\\Lib\\site-packages\\rapidfuzz\\fuzz_py.py',
+   'C:\\Users\\ygyg4\\music-player\\.venv\\Lib\\site-packages\\rapidfuzz\\fuzz_py.py',
    'PYMODULE'),
   ('rapidfuzz.process',
-   'C:\\Users\\ygyg4\\OneDrive\\Desktop\\music '
-   'player\\.venv\\Lib\\site-packages\\rapidfuzz\\process.py',
+   'C:\\Users\\ygyg4\\music-player\\.venv\\Lib\\site-packages\\rapidfuzz\\process.py',
    'PYMODULE'),
   ('rapidfuzz.process_cpp',
-   'C:\\Users\\ygyg4\\OneDrive\\Desktop\\music '
-   'player\\.venv\\Lib\\site-packages\\rapidfuzz\\process_cpp.py',
+   'C:\\Users\\ygyg4\\music-player\\.venv\\Lib\\site-packages\\rapidfuzz\\process_cpp.py',
    'PYMODULE'),
   ('rapidfuzz.process_py',
-   'C:\\Users\\ygyg4\\OneDrive\\Desktop\\music '
-   'player\\.venv\\Lib\\site-packages\\rapidfuzz\\process_py.py',
+   'C:\\Users\\ygyg4\\music-player\\.venv\\Lib\\site-packages\\rapidfuzz\\process_py.py',
    'PYMODULE'),
   ('rapidfuzz.utils',
-   'C:\\Users\\ygyg4\\OneDrive\\Desktop\\music '
-   'player\\.venv\\Lib\\site-packages\\rapidfuzz\\utils.py',
+   'C:\\Users\\ygyg4\\music-player\\.venv\\Lib\\site-packages\\rapidfuzz\\utils.py',
    'PYMODULE'),
   ('rapidfuzz.utils_py',
-   'C:\\Users\\ygyg4\\OneDrive\\Desktop\\music '
-   'player\\.venv\\Lib\\site-packages\\rapidfuzz\\utils_py.py',
+   'C:\\Users\\ygyg4\\music-player\\.venv\\Lib\\site-packages\\rapidfuzz\\utils_py.py',
    'PYMODULE'),
   ('runpy',
    'C:\\Users\\ygyg4\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\runpy.py',
@@ -728,8 +672,7 @@
    'C:\\Users\\ygyg4\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\selectors.py',
    'PYMODULE'),
   ('shiboken6',
-   'C:\\Users\\ygyg4\\OneDrive\\Desktop\\music '
-   'player\\.venv\\Lib\\site-packages\\shiboken6\\__init__.py',
+   'C:\\Users\\ygyg4\\music-player\\.venv\\Lib\\site-packages\\shiboken6\\__init__.py',
    'PYMODULE'),
   ('shlex',
    'C:\\Users\\ygyg4\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\shlex.py',
@@ -786,8 +729,7 @@
    'C:\\Users\\ygyg4\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\typing.py',
    'PYMODULE'),
   ('typing_extensions',
-   'C:\\Users\\ygyg4\\OneDrive\\Desktop\\music '
-   'player\\.venv\\Lib\\site-packages\\typing_extensions.py',
+   'C:\\Users\\ygyg4\\music-player\\.venv\\Lib\\site-packages\\typing_extensions.py',
    'PYMODULE'),
   ('urllib',
    'C:\\Users\\ygyg4\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\urllib\\__init__.py',
@@ -812,39 +754,31 @@
    'PYMODULE'),
   ('winrt', '-', 'PYMODULE'),
   ('winrt.runtime',
-   'C:\\Users\\ygyg4\\OneDrive\\Desktop\\music '
-   'player\\.venv\\Lib\\site-packages\\winrt\\runtime\\__init__.py',
+   'C:\\Users\\ygyg4\\music-player\\.venv\\Lib\\site-packages\\winrt\\runtime\\__init__.py',
    'PYMODULE'),
   ('winrt.runtime._internals',
-   'C:\\Users\\ygyg4\\OneDrive\\Desktop\\music '
-   'player\\.venv\\Lib\\site-packages\\winrt\\runtime\\_internals.py',
+   'C:\\Users\\ygyg4\\music-player\\.venv\\Lib\\site-packages\\winrt\\runtime\\_internals.py',
    'PYMODULE'),
   ('winrt.runtime.interop',
-   'C:\\Users\\ygyg4\\OneDrive\\Desktop\\music '
-   'player\\.venv\\Lib\\site-packages\\winrt\\runtime\\interop.py',
+   'C:\\Users\\ygyg4\\music-player\\.venv\\Lib\\site-packages\\winrt\\runtime\\interop.py',
    'PYMODULE'),
   ('winrt.system',
-   'C:\\Users\\ygyg4\\OneDrive\\Desktop\\music '
-   'player\\.venv\\Lib\\site-packages\\winrt\\system\\__init__.py',
+   'C:\\Users\\ygyg4\\music-player\\.venv\\Lib\\site-packages\\winrt\\system\\__init__.py',
    'PYMODULE'),
   ('winrt.windows', '-', 'PYMODULE'),
   ('winrt.windows.foundation',
-   'C:\\Users\\ygyg4\\OneDrive\\Desktop\\music '
-   'player\\.venv\\Lib\\site-packages\\winrt\\windows\\foundation\\__init__.py',
+   'C:\\Users\\ygyg4\\music-player\\.venv\\Lib\\site-packages\\winrt\\windows\\foundation\\__init__.py',
    'PYMODULE'),
   ('winrt.windows.foundation.collections',
-   'C:\\Users\\ygyg4\\OneDrive\\Desktop\\music '
-   'player\\.venv\\Lib\\site-packages\\winrt\\windows\\foundation\\collections\\__init__.py',
+   'C:\\Users\\ygyg4\\music-player\\.venv\\Lib\\site-packages\\winrt\\windows\\foundation\\collections\\__init__.py',
    'PYMODULE'),
   ('winrt.windows.media', '-', 'PYMODULE'),
   ('winrt.windows.media.control',
-   'C:\\Users\\ygyg4\\OneDrive\\Desktop\\music '
-   'player\\.venv\\Lib\\site-packages\\winrt\\windows\\media\\control\\__init__.py',
+   'C:\\Users\\ygyg4\\music-player\\.venv\\Lib\\site-packages\\winrt\\windows\\media\\control\\__init__.py',
    'PYMODULE'),
   ('winrt.windows.storage', '-', 'PYMODULE'),
   ('winrt.windows.storage.streams',
-   'C:\\Users\\ygyg4\\OneDrive\\Desktop\\music '
-   'player\\.venv\\Lib\\site-packages\\winrt\\windows\\storage\\streams\\__init__.py',
+   'C:\\Users\\ygyg4\\music-player\\.venv\\Lib\\site-packages\\winrt\\windows\\storage\\streams\\__init__.py',
    'PYMODULE'),
   ('xml',
    'C:\\Users\\ygyg4\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\xml\\__init__.py',

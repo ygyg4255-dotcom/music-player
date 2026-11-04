@@ -425,10 +425,11 @@ def test_collapse_keeps_top_edge_anchored(island: IslandWindow, qapp):
 def test_close_button_present(island: IslandWindow):
     button = island.close_button
     assert button.isVisible()
-    assert button.toolTip() == "Close Music Timer"
+    assert button.toolTip() == "Close Player Music"
     assert (button.width(), button.height()) == (22, 22)
     # Cleanly separated from the expand toggle: it is the last header item.
     assert button is not island.expand_button
+    assert island.windowTitle() == "Player Music"
 
 
 def test_close_button_hands_off_to_app_layer(island: IslandWindow, recorder):

@@ -418,7 +418,7 @@ def run(argv: list[str] | None = None, quit_after_ms: int | None = None) -> int:
     _configure_logging()
     logger.info("Starting %s v%s", config.APP_NAME, VERSION)
 
-    QtCore.QCoreApplication.setOrganizationName("DynamicIslandMusicPlayer")
+    QtCore.QCoreApplication.setOrganizationName("PlayerMusic")
     QtCore.QCoreApplication.setApplicationName(config.APP_NAME)
     QtCore.QCoreApplication.setApplicationVersion(VERSION)
 

@@ -1,4 +1,4 @@
-# Dynamic Island Music Player
+# Player Music
 
 A compact, always-on-top floating music timer for Windows — inspired by
 Apple's Dynamic Island. Enter a song and a duration; the app finds the song
@@ -180,15 +180,15 @@ pytest                    # run the test suite (189 tests)
 ```powershell
 .\.venv\Scripts\Activate.ps1
 pyinstaller --noconfirm --clean --onefile --windowed ^
-  --name DynamicIslandMusicPlayer --paths src main.py
+  --name PlayerMusic --paths src main.py
 ```
 
-The executable lands in `dist\DynamicIslandMusicPlayer.exe` (the same
-command also writes/updates the reproducible `DynamicIslandMusicPlayer.spec`
+The executable lands in `dist\PlayerMusic.exe` (the same
+command also writes/updates the reproducible `PlayerMusic.spec`
 at the project root). Verify it with:
 
 ```powershell
-.\dist\DynamicIslandMusicPlayer.exe --smoke
+.\dist\PlayerMusic.exe --smoke
 ```
 
 (the window appears for ~4 s and the process exits with code 0), and

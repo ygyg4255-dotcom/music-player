@@ -5,7 +5,10 @@ from __future__ import annotations
 import os
 from pathlib import Path
 
-APP_NAME = "Dynamic Island Music Player"
+APP_NAME = "Player Music"
+#: Stable storage identifier (settings folder, log folder, HKCU Run value
+#: name).  Deliberately NOT derived from the display name: renaming it
+#: would orphan existing user settings and any registered startup entry.
 APP_ID = "dynamic-island-music-player"
 VERSION = "0.1.0"
 

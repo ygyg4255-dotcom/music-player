@@ -15,7 +15,7 @@ import winreg
 
 from music_player import config, startup
 
-TEST_KEY = r"Software\DynamicIslandMusicPlayerTestStartup"
+TEST_KEY = r"Software\PlayerMusicTestStartup"
 
 
 @pytest.fixture

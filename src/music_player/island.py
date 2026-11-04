@@ -98,6 +98,7 @@ class IslandWindow(QtWidgets.QWidget):
     def __init__(self, stored: dict | None = None) -> None:
         super().__init__()
         self.setObjectName("islandWindow")
+        self.setWindowTitle("Player Music")
         self.setWindowFlags(
             QtCore.Qt.WindowType.FramelessWindowHint
             | QtCore.Qt.WindowType.WindowStaysOnTopHint
@@ -212,7 +213,7 @@ class IslandWindow(QtWidgets.QWidget):
         # window drag (mousePressEvent only sees events no child accepted).
         self.close_button = QtWidgets.QPushButton("✕")
         self.close_button.setObjectName("closeButton")
-        self.close_button.setToolTip("Close Music Timer")
+        self.close_button.setToolTip("Close Player Music")
         self.close_button.setCursor(QtCore.Qt.CursorShape.PointingHandCursor)
         self.close_button.setFixedSize(22, 22)
         # Closing the island hands the shutdown to the application layer

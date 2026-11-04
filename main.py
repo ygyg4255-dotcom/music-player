@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Entry point for the Dynamic Island Music Player.
+"""Entry point for the Player Music application.
 
 Optional CLI flags (used by automated verification and the packaged exe):
 
