@@ -28,6 +28,14 @@ Everything the app does across its layers:
 * **startup opt-in** — the checkbox (off by default) is the explicit
   permission required to touch the Windows Run key.
 
+* **close** — the first close request (✕, Alt+F4) is handed to the
+  application layer: it hides the island immediately, cancels the
+  countdown, and pauses the tracked song's media session with the exact
+  same safe session-matching machinery as on expiry; the process exits
+  when the pause attempt completes, capped at half a second so a stuck
+  GSMTC call can never hang the exit.  When nothing was started, the
+  app quits instantly.  A guard flag makes double-close harmless.
+
 No system tray, no background service: when the island window closes, the
 process exits and the media-control thread (daemon) dies with it.
 """
@@ -51,6 +59,14 @@ logger = logging.getLogger(__name__)
 
 #: Session statuses that mean "playback is not running" for sync purposes.
 _NOT_PLAYING = {"Paused", "Stopped", "Closed"}
+
+
+def _quit_app() -> None:
+    """Quit the Qt event loop cleanly (kept as an indirection point for
+    tests, which replace it to observe the quit without ending pytest)."""
+    app = QtCore.QCoreApplication.instance()
+    if app is not None:
+        app.quit()
 
 
 def _wire(
@@ -311,6 +327,63 @@ def _wire(
             )
 
     window.startup_toggled.connect(_on_startup_toggled)
+
+    # --- close: pause the tracked song before the process exits -------------
+
+    # Re-entrancy guard: a second close request (double ✕ click, or a
+    # closeEvent after the handshake began) must never start a second one.
+    closing = {"flag": False}
+    finished = {"flag": False}
+    # True only while _finish_shutdown is connected to pause_result; PySide6
+    # warns on disconnecting a slot that was never connected.
+    pause_wait = {"flag": False}
+
+    def _finish_shutdown(*_args: object) -> None:
+        """End the process once the pause attempt completed (or timed out)."""
+        if finished["flag"]:
+            return
+        finished["flag"] = True
+        if pause_wait["flag"]:
+            media.pause_result.disconnect(_finish_shutdown)
+            pause_wait["flag"] = False
+        media.stop_monitoring()
+        _quit_app()
+
+    def _on_close_requested() -> None:
+        if closing["flag"]:
+            return
+        closing["flag"] = True
+        window.hide()  # the UI feels instant
+        window.timer.cancel()  # the countdown never ticks during shutdown
+        source = orchestrator.current_source
+        if source is None:
+            # Idle (or only a search still in flight): nothing this app
+            # started can be playing, so no pause is needed — quit now.
+            _finish_shutdown()
+            return
+        # Pause the tracked song with the exact same safe machinery as on
+        # expiry: try the source directly, then the GSMTC session matched
+        # by app hint + song title; an unrelated session is never touched.
+        source, paused = orchestrator.pause_playback()
+        if source is not None and paused:
+            _finish_shutdown()
+            return
+        if media.available:
+            # pause_relevant() runs on the media-control daemon thread;
+            # its outcome arrives via pause_result — but exiting the event
+            # loop on this very tick would kill that thread mid-call, so
+            # wait (bounded) for the result before quitting.
+            pause_wait["flag"] = True
+            media.pause_result.connect(_finish_shutdown)
+            media.pause_relevant(source.control_hint, title_query=source.control_title)
+            # Never hang: cap the wait even if GSMTC never answers.
+            QtCore.QTimer.singleShot(500, _finish_shutdown)
+        else:
+            # Honest: without the media-session API there is nothing to
+            # pause; exiting immediately is the only correct thing to do.
+            _finish_shutdown()
+
+    window.close_requested.connect(_on_close_requested)
 
 
 def _configure_logging() -> None:

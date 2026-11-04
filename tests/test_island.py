@@ -431,11 +431,28 @@ def test_close_button_present(island: IslandWindow):
     assert button is not island.expand_button
 
 
-def test_close_button_click_closes_island(island: IslandWindow, recorder):
+def test_close_button_hands_off_to_app_layer(island: IslandWindow, recorder):
+    requests: list[int] = []
+    island.close_requested.connect(lambda: requests.append(1))
+
     island.close_button.click()
 
-    # The window closed and closeEvent ran: it persisted the UI settings
-    # on the way out (the same path WA_QuitOnClose turns into a clean
-    # process exit, verified live by the --smoke launch check).
-    assert island.isVisible() is False
+    # First close: the island cleans up (settings persisted, countdown
+    # cancelled) and hands the shutdown to the application layer — the
+    # close is deferred so the tracked song can be paused first (verified
+    # in the wiring tests).
+    assert requests == [1]
     assert recorder.settings
+    assert island.isVisible() is True  # not closed yet
+
+
+def test_close_completes_after_app_layer_handoff(island: IslandWindow, qapp):
+    # The app layer's role: like the pause handshake, its real close is
+    # deferred — Qt ignores a close() issued from inside a closeEvent.
+    island.close_requested.connect(
+        lambda: QtCore.QTimer.singleShot(0, island.close)
+    )
+    island.close_button.click()
+    assert island.isVisible() is True  # close deferred, not lost
+    QTest.qWait(20)  # the deferred close completes the window
+    assert island.isVisible() is False

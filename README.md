@@ -75,7 +75,7 @@ From source:
 ```powershell
 python main.py            # normal launch
 python main.py --smoke    # automated check: window opens, closes after 4 s
-pytest                    # run the test suite (184 tests)
+pytest                    # run the test suite (189 tests)
 ```
 
 ## Usage
@@ -100,10 +100,14 @@ pytest                    # run the test suite (184 tests)
   off by default; ticking it writes exactly one value under your
   `HKCU\...\CurrentVersion\Run` key, and unticking it removes only that
   value. No services, no scheduled tasks, no machine-wide changes.
-- The small **✕** in the pill's corner closes the app cleanly (exit code 0).
+- The small **✕** in the pill's corner (or closing the window) exits the
+  app — but first it pauses the song it started, using the same safe
+  media-session matching as on expiry (only the tracked song's session
+  is ever touched). The exit is capped at half a second even if the
+  media API never answers; when nothing is playing it quits instantly.
 - Closing the window exits the process — no tray icon, no background
   process is left behind, and no other application (Brave, your player)
-  is ever closed by the app.
+  is ever closed by the app (the started song is paused, not killed).
 
 ## Dependencies
 
@@ -211,7 +215,7 @@ src/music_player/
   media_control.py          Windows GSMTC media-session control
   youtube.py                YouTube fallback: first result + Brave integration
   startup.py                optional HKCU Run registration (opt-in)
-tests/                      pytest suite (184 tests)
+tests/                      pytest suite (189 tests)
 scripts/
   smoke_launch.py           quick launch/exit check
   probe_media_sessions.py   list current Windows media sessions
@@ -224,7 +228,7 @@ scripts/
 
 ## Verification summary
 
-- 184 automated tests, all passing (`pytest`).
+- 189 automated tests, all passing (`pytest`).
 - Live, non-image verification performed during development:
   local search against the real Music folder; GSMTC pause/resume against
   PotPlayer and Microsoft Media Player; Brave tab opening + same-session

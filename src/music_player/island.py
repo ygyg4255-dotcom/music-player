@@ -82,6 +82,9 @@ class IslandWindow(QtWidgets.QWidget):
     startup_toggled = QtCore.Signal(bool)
     #: UI settings changed (song text, duration, expanded) — app persists them
     ui_settings_changed = QtCore.Signal(dict)
+    #: the user asked to close the app (✕ click, Alt+F4, window close):
+    #: the app layer pauses the tracked song before the process exits
+    close_requested = QtCore.Signal()
 
     # --- geometry constants --------------------------------------------------
     PILL_HEIGHT = 58
@@ -108,6 +111,10 @@ class IslandWindow(QtWidgets.QWidget):
         self._expanded = False
         self._anim: QtCore.QVariantAnimation | None = None
         self._drag_pos: QtCore.QPoint | None = None
+        # Re-entrancy guard for the close handshake: the first close is
+        # handed to the application layer (close_requested); only a close
+        # after (or during) that handshake completes the window close.
+        self._close_in_progress = False
 
         # --- hover auto-expand / auto-collapse -------------------------------
         self._hover_expand_timer = QtCore.QTimer(self)
@@ -208,9 +215,10 @@ class IslandWindow(QtWidgets.QWidget):
         self.close_button.setToolTip("Close Music Timer")
         self.close_button.setCursor(QtCore.Qt.CursorShape.PointingHandCursor)
         self.close_button.setFixedSize(22, 22)
-        # Closing the island ends the process: WA_QuitOnClose makes the last
-        # window's close quit the QApplication, app.run()'s `finally` block
-        # stops media monitoring, and the process exits with code 0.
+        # Closing the island hands the shutdown to the application layer
+        # (closeEvent → close_requested): it pauses the tracked song before
+        # the process exits.  WA_QuitOnClose plus the app's quit() make the
+        # process end with code 0.
         self.close_button.clicked.connect(lambda *_args: self.close())
         header.addWidget(self.close_button)
 
@@ -633,4 +641,16 @@ class IslandWindow(QtWidgets.QWidget):
         self._hover_collapse_timer.stop()
         self._timer.cancel()
         self._emit_settings()
+        if not self._close_in_progress:
+            # First close request: the application layer owns the shutdown —
+            # it hides the window, pauses the tracked song (same safe GSMTC
+            # session matching as on expiry), and quits once that is done.
+            # Ignoring the event keeps every close path (✕ click, Alt+F4,
+            # programmatic close) under the handshake's control.
+            self._close_in_progress = True
+            event.ignore()
+            self.close_requested.emit()
+            return
+        # A close after (or during) the handshake completes normally; the
+        # handshake itself runs only once (the app layer's closing guard).
         super().closeEvent(event)

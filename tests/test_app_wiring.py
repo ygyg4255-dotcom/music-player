@@ -116,6 +116,12 @@ def wired(qapp, clock, monkeypatch):
     window.show()
     yield type("W", (), {"window": window, "orch": orch, "media": media,
                          "backend": backend, "startup": stub_startup})()
+    # Teardown must not run the close handshake (pause-before-exit): a test
+    # may leave a source registered, and the handshake's 500 ms fallback
+    # timer would fire into the NEXT test.  Marking the window as already
+    # handed off makes closeEvent accept immediately, without emitting
+    # close_requested; the media backend is cleaned up explicitly below.
+    window._close_in_progress = True
     window.close()
     media._shutdown()
 
@@ -687,3 +693,89 @@ def test_restart_clears_stale_source(wired, qapp, monkeypatch):
     assert wired.orch.current_source is None
     # Let the (stubbed) async workflow finish before teardown.
     assert _pump(qapp, lambda: played == ["a new song"])
+
+# --- close: pause the tracked song before the process exits ------------------------
+
+
+class StubSource:
+    """A source duck-typed like LocalFileSource/YouTubeSource for the
+    close-handshake tests: pause() cannot act directly, so the shutdown
+    must go through the (fake) GSMTC backend."""
+
+    control_hint = "potplayermini64"
+    control_title = "Karma Police"
+
+    def pause(self) -> bool:
+        return False
+
+
+POT_SONG = SessionInfo("PotPlayerMini64.exe", "Playing", "Karma Police")
+
+
+def test_close_while_playing_pauses_tracked_song_then_quits(wired, qapp, monkeypatch):
+    quits: list[int] = []
+    monkeypatch.setattr(app_module, "_quit_app", lambda: quits.append(1))
+
+    wired.orch._source = StubSource()     # an active workflow
+    wired.window.timer.start(120)         # countdown running
+    wired.backend.sessions = [POT_SONG]   # the tracked song is playing
+
+    wired.window.close()                  # ✕ click / window close
+
+    # Instant for the user: hidden at once, countdown cancelled…
+    assert wired.window.isVisible() is False
+    assert wired.window.timer.state is TimerState.IDLE
+    # …but the quit is deferred until the pause attempt completed.
+    assert quits == []
+
+    # The pause went through the same safe session matching as on expiry
+    # (hint + title) and hit only the matching session.
+    assert _pump(qapp, lambda: wired.backend.pause_calls)
+    assert wired.backend.pause_calls == [(POT_SONG.source_id, "Karma Police")]
+
+    # pause_result arrives → shutdown finishes → the app quits exactly once.
+    assert _pump(qapp, lambda: quits == [1])
+    assert wired.media._monitoring is False
+
+
+def test_close_while_idle_quits_immediately_without_pause(wired, monkeypatch):
+    quits: list[int] = []
+    monkeypatch.setattr(app_module, "_quit_app", lambda: quits.append(1))
+    assert wired.window.timer.state is TimerState.IDLE
+    assert wired.orch.current_source is None
+
+    wired.window.close()
+
+    # Same tick: no deferred shutdown, no unnecessary pause request at all.
+    assert quits == [1]
+    assert wired.backend.pause_calls == []
+    assert wired.media._monitoring is False
+
+
+def test_close_never_hangs_when_gsmtc_does_not_answer(wired, qapp, monkeypatch):
+    quits: list[int] = []
+    monkeypatch.setattr(app_module, "_quit_app", lambda: quits.append(1))
+    wired.orch._source = StubSource()
+    wired.window.timer.start(120)
+    # GSMTC never answers: the pause request disappears without a result.
+    monkeypatch.setattr(wired.media, "pause_relevant", lambda *a, **k: None)
+
+    wired.window.close()
+    assert quits == []
+
+    # The half-second fallback timer ends the process anyway.
+    assert _pump(qapp, lambda: quits == [1], timeout_ms=2_000)
+
+
+def test_second_close_request_starts_no_second_shutdown(wired, qapp, monkeypatch):
+    quits: list[int] = []
+    monkeypatch.setattr(app_module, "_quit_app", lambda: quits.append(1))
+    wired.orch._source = StubSource()
+    wired.window.timer.start(120)
+    wired.backend.sessions = [POT_SONG]
+
+    wired.window.close()                  # handshake starts (pause pending)
+    wired.window.close_requested.emit()   # double ✕ / stray second request
+
+    assert _pump(qapp, lambda: quits == [1])
+    assert len(wired.backend.pause_calls) == 1  # exactly one pause attempt
