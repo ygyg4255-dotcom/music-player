@@ -3,7 +3,8 @@
 from __future__ import annotations
 
 import pytest
-from PySide6 import QtCore
+from PySide6 import QtCore, QtGui
+from PySide6.QtTest import QTest
 
 from music_player import timer as timer_mod
 from music_player.island import IslandWindow
@@ -223,3 +224,218 @@ def test_settings_restore_expanded(qapp):
     w = IslandWindow({"song": "x", "duration_minutes": 1.0, "expanded": True})
     assert w.is_expanded is True
     w.close()
+
+
+# --- hover auto-expand / auto-collapse ----------------------------------------------
+
+
+def _send(widget, event_type: QtCore.QEvent.Type) -> None:
+    """Deliver a synthetic enter/leave event to *widget*."""
+    QtCore.QCoreApplication.sendEvent(widget, QtCore.QEvent(event_type))
+
+
+def _cursor_at(monkeypatch: pytest.MonkeyPatch, pos: QtCore.QPoint) -> None:
+    monkeypatch.setattr(QtGui.QCursor, "pos", staticmethod(lambda: pos))
+
+
+def _cursor_outside(monkeypatch: pytest.MonkeyPatch, island: IslandWindow) -> None:
+    away = island.frameGeometry().topLeft() - QtCore.QPoint(500, 500)
+    _cursor_at(monkeypatch, away)
+
+
+def test_hover_expands_after_debounce(island: IslandWindow, monkeypatch):
+    _cursor_at(monkeypatch, island.frameGeometry().center())
+    assert island.is_expanded is False
+
+    _send(island, QtCore.QEvent.Type.Enter)
+    assert island._hover_expand_timer.isActive()  # debounce armed
+    island._hover_expand()  # debounce elapsed with the mouse still inside
+
+    assert island.is_expanded is True
+
+
+def test_rapid_pass_through_does_not_expand(island: IslandWindow, monkeypatch):
+    _cursor_at(monkeypatch, island.frameGeometry().center())
+    _send(island, QtCore.QEvent.Type.Enter)
+    _send(island, QtCore.QEvent.Type.Leave)  # left before the debounce fired
+    assert island._hover_expand_timer.isActive() is False
+    assert island.is_expanded is False
+
+
+def test_hover_expanded_collapses_after_leave(island: IslandWindow, monkeypatch):
+    _cursor_outside(monkeypatch, island)
+    island._hover_expand()
+
+    _send(island, QtCore.QEvent.Type.Leave)
+    assert island._hover_collapse_timer.isActive()  # grace period armed
+    island._hover_collapse()  # grace elapsed, cursor outside, no focus
+
+    assert island.is_expanded is False
+    assert island.height() == island._collapsed_height()
+    assert island._frame.height() == island.PILL_HEIGHT
+
+
+def test_leave_does_not_collapse_while_input_focused(
+    island: IslandWindow, monkeypatch, qapp
+):
+    _cursor_outside(monkeypatch, island)
+    island._hover_expand()
+    island.song_input.setFocus()
+    qapp.processEvents()
+    assert island.song_input.hasFocus()
+
+    _send(island, QtCore.QEvent.Type.Leave)
+    island._hover_collapse()
+
+    # Typing comfort wins: the panel stays open even if the cursor left.
+    assert island.is_expanded is True
+
+
+def test_leave_does_not_collapse_while_expired(
+    island: IslandWindow, monkeypatch, clock: FakeClock
+):
+    _cursor_outside(monkeypatch, island)
+    island._hover_expand()
+    island.timer.start(5.0)
+    clock.advance(6.0)
+    island.timer.check()
+    assert island.timer.state is TimerState.EXPIRED
+
+    _send(island, QtCore.QEvent.Type.Leave)
+    island._hover_collapse()
+
+    # The expiry alert needs explicit dismissal; auto-collapse must not
+    # hide it.
+    assert island.is_expanded is True
+
+
+def test_manual_expansion_also_collapses_on_leave(island: IslandWindow, monkeypatch):
+    # Whatever started the expansion, moving the mouse away always shrinks
+    # the island back into the slim compact bar.
+    _cursor_outside(monkeypatch, island)
+    island.expand_button.click()  # manual expand
+    assert island.is_expanded is True
+
+    _send(island, QtCore.QEvent.Type.Leave)
+    island._hover_collapse()  # grace elapsed
+
+    assert island.is_expanded is False
+    assert island.height() == island._collapsed_height()
+    assert island._frame.height() == island.PILL_HEIGHT
+
+
+def test_toggle_button_still_collapses_hover_expansion(
+    island: IslandWindow, monkeypatch, qapp
+):
+    _cursor_at(monkeypatch, island.frameGeometry().center())
+    island._hover_expand()
+    assert island.is_expanded is True
+
+    island.expand_button.click()  # manual collapse on demand
+    qapp.processEvents()
+    assert island.is_expanded is False
+
+    # Re-entering the compact pill arms a fresh hover expansion.
+    _send(island, QtCore.QEvent.Type.Enter)
+    assert island._hover_expand_timer.isActive()
+
+
+def test_drag_press_blocks_hover_expand(island: IslandWindow, monkeypatch):
+    _cursor_at(monkeypatch, island.frameGeometry().center())
+    _send(island, QtCore.QEvent.Type.Enter)
+    assert island._hover_expand_timer.isActive()
+
+    # Pressing on the pill starts a window drag and must cancel the pending
+    # hover expansion.
+    QTest.mousePress(island, QtCore.Qt.MouseButton.LeftButton)
+    assert island._hover_expand_timer.isActive() is False
+    assert island._drag_pos is not None
+    QTest.mouseRelease(island, QtCore.Qt.MouseButton.LeftButton)
+
+
+# --- collapse geometry: window AND pill must actually shrink -----------------------
+
+
+def test_button_collapse_shrinks_window_and_pill(island: IslandWindow, qapp):
+    island.set_expanded(True, animate=False)
+    qapp.processEvents()
+    expanded_total = island.height()
+    assert expanded_total > island._collapsed_height()
+    assert island._frame.height() > island.PILL_HEIGHT
+
+    island.expand_button.click()  # manual collapse (animated)
+    QTest.qWait(320)  # let the 240 ms shrink animation finish
+
+    assert island.is_expanded is False
+    assert island.height() == island._collapsed_height()
+    assert island._frame.height() == island.PILL_HEIGHT
+
+
+def test_launch_expanded_collapses_on_mouse_in_out(monkeypatch, qapp):
+    # The saved-settings launch state: the app starts expanded.  Moving the
+    # mouse in and out must still collapse it into the slim bar.
+    w = IslandWindow({"song": "x", "duration_minutes": 1.0, "expanded": True})
+    w.show()
+    qapp.processEvents()
+    assert w.is_expanded is True
+    assert w.height() > w._collapsed_height()
+
+    # The mouse leaves the island (cursor outside) and the grace period
+    # elapses — the expansion started from saved settings must not survive.
+    _cursor_outside(monkeypatch, w)
+    _send(w, QtCore.QEvent.Type.Enter)
+    _send(w, QtCore.QEvent.Type.Leave)
+    w._hover_collapse()  # grace period elapsed
+    QTest.qWait(320)  # collapse is animated
+
+    assert w.is_expanded is False
+    assert w.height() == w._collapsed_height()
+    assert w._frame.height() == w.PILL_HEIGHT
+    w.close()
+
+
+def test_animated_collapse_ends_at_compact_height(island: IslandWindow, qapp):
+    island.set_expanded(True, animate=True)
+    QTest.qWait(320)  # let the expand animation finish
+    assert island.height() > island._collapsed_height()
+
+    island.set_expanded(False, animate=True)  # e.g. the mouse-leave path
+    QTest.qWait(320)
+
+    assert island.height() == island._collapsed_height()
+    assert island._frame.height() == island.PILL_HEIGHT
+
+
+def test_collapse_keeps_top_edge_anchored(island: IslandWindow, qapp):
+    island.set_expanded(True, animate=True)
+    QTest.qWait(320)
+    top = island.geometry().top()
+
+    island.set_expanded(False, animate=True)
+    QTest.qWait(320)
+
+    # The slim bar must hang from the same top edge — the window must not
+    # drift down (or up) while shrinking.
+    assert island.geometry().top() == top
+
+
+# --- close button -------------------------------------------------------------------
+
+
+def test_close_button_present(island: IslandWindow):
+    button = island.close_button
+    assert button.isVisible()
+    assert button.toolTip() == "Close Music Timer"
+    assert (button.width(), button.height()) == (22, 22)
+    # Cleanly separated from the expand toggle: it is the last header item.
+    assert button is not island.expand_button
+
+
+def test_close_button_click_closes_island(island: IslandWindow, recorder):
+    island.close_button.click()
+
+    # The window closed and closeEvent ran: it persisted the UI settings
+    # on the way out (the same path WA_QuitOnClose turns into a clean
+    # process exit, verified live by the --smoke launch check).
+    assert island.isVisible() is False
+    assert recorder.settings

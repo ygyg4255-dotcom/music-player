@@ -3,9 +3,26 @@
 A compact, always-on-top, frameless, translucent pill with a drop shadow,
 rounded corners, and a dark theme.  It has two layout states:
 
-* collapsed — the pill itself: song, countdown, pause/cancel, expand button
+* collapsed — the pill itself: song, countdown, pause/cancel, expand button,
+  close button
 * expanded  — additional controls appear below (song input, duration input,
   start button, status line)
+
+The island auto-expands while the mouse hovers over the compact pill
+(150 ms debounce) and — whatever started the expansion (hover, the
+manual toggle, or a restored launch state) — auto-collapses back into
+the slim bar when the mouse leaves (400 ms grace), unless an input has
+keyboard focus or the countdown has expired (an alert that needs
+explicit dismissal).
+The small corner ✕ closes the island, which — with ``WA_QuitOnClose`` —
+quits the whole application cleanly.
+
+Sizing is enforced explicitly: on every geometry change (animated or
+not) both the top-level window and the inner dark pill frame are resized
+to the target height.  Animating only the min/max size constraints is
+not enough for a frameless translucent window on Windows — the window
+(and with it the stretched pill frame) stays at its old height and the
+header floats inside a too-tall black rectangle.
 
 State transitions animate smoothly.  All sizing is layout-driven: the
 expand/collapse animation interpolates the window's minimum/maximum height
@@ -70,6 +87,10 @@ class IslandWindow(QtWidgets.QWidget):
     PILL_HEIGHT = 58
     SHADOW_MARGIN = 16          # room around the pill for the drop shadow
     WINDOW_WIDTH = 400
+    #: Hover debounce: rapid mouse pass-throughs must not expand the island.
+    HOVER_EXPAND_DELAY_MS = 150
+    #: Grace period before an expanded island auto-collapses on mouse leave.
+    HOVER_COLLAPSE_DELAY_MS = 400
 
     def __init__(self, stored: dict | None = None) -> None:
         super().__init__()
@@ -85,8 +106,18 @@ class IslandWindow(QtWidgets.QWidget):
         self.setAttribute(QtCore.Qt.WidgetAttribute.WA_QuitOnClose, True)
 
         self._expanded = False
-        self._anim_group: QtCore.QParallelAnimationGroup | None = None
+        self._anim: QtCore.QVariantAnimation | None = None
         self._drag_pos: QtCore.QPoint | None = None
+
+        # --- hover auto-expand / auto-collapse -------------------------------
+        self._hover_expand_timer = QtCore.QTimer(self)
+        self._hover_expand_timer.setSingleShot(True)
+        self._hover_expand_timer.setInterval(self.HOVER_EXPAND_DELAY_MS)
+        self._hover_expand_timer.timeout.connect(self._hover_expand)
+        self._hover_collapse_timer = QtCore.QTimer(self)
+        self._hover_collapse_timer.setSingleShot(True)
+        self._hover_collapse_timer.setInterval(self.HOVER_COLLAPSE_DELAY_MS)
+        self._hover_collapse_timer.timeout.connect(self._hover_collapse)
 
         self._timer = CountdownTimer(self)
         self._timer.started.connect(self._on_started)
@@ -167,6 +198,22 @@ class IslandWindow(QtWidgets.QWidget):
         )
         header.addWidget(self.expand_button)
 
+        # -- corner close button (quits the app cleanly) --
+        # Smaller than the other header buttons and separated from the
+        # expand toggle by the layout spacing, so the two are not confused.
+        # Presses are consumed by the button itself, so they never start a
+        # window drag (mousePressEvent only sees events no child accepted).
+        self.close_button = QtWidgets.QPushButton("✕")
+        self.close_button.setObjectName("closeButton")
+        self.close_button.setToolTip("Close Music Timer")
+        self.close_button.setCursor(QtCore.Qt.CursorShape.PointingHandCursor)
+        self.close_button.setFixedSize(22, 22)
+        # Closing the island ends the process: WA_QuitOnClose makes the last
+        # window's close quit the QApplication, app.run()'s `finally` block
+        # stops media monitoring, and the process exits with code 0.
+        self.close_button.clicked.connect(lambda *_args: self.close())
+        header.addWidget(self.close_button)
+
         root.addLayout(header)
 
         # -- expanded panel (animated in/out via height) --
@@ -239,34 +286,86 @@ class IslandWindow(QtWidgets.QWidget):
     def _expanded_height(self) -> int:
         """Height the layout wants when the panel is visible."""
         self._panel.show()
+        # Undo the fixed height the collapse path pins on the pill frame:
+        # with a bounded frame the outer layout's sizeHint stays frozen at
+        # the collapsed height and the island could never grow again.
+        self._frame.setMinimumHeight(0)
+        self._frame.setMaximumHeight(16_777_215)  # QWIDGETSIZE_MAX
         hint = self.layout().sizeHint().height()
         return max(hint, self._collapsed_height())
 
+    def _resize_island(self, total_height: int, top_left: QtCore.QPoint | None = None) -> None:
+        """Force the window AND the inner dark pill frame to *total_height*.
+
+        The pill frame is pinned to ``total_height - shadow margins`` so it
+        is a slim bar tightly wrapping the header row when compact (and
+        fills the panel when expanded), the top-level window is explicitly
+        resized — anchored at *top_left*, so the top edge never drifts on
+        screen — and the layout is reactivated so the header follows at
+        once.  Without the explicit resize, a frameless translucent
+        Windows top-level widget ignores min/max-height constraint changes
+        and stays at its old (expanded) height.
+        """
+        pill_height = max(1, total_height - 2 * self.SHADOW_MARGIN)
+        self._frame.setFixedHeight(pill_height)
+        self.setFixedHeight(total_height)
+        if top_left is not None:
+            self.setGeometry(top_left.x(), top_left.y(), self.width(), total_height)
+        else:
+            self.resize(self.width(), total_height)
+        self.layout().activate()
+
     def _apply_geometry(self, height: int, animate: bool) -> None:
-        """Pin the window to *height* (all width fixed), animated or not."""
-        if self._anim_group is not None:
-            self._anim_group.stop()
-            self._anim_group.deleteLater()
-            self._anim_group = None
+        """Pin the window — and the dark pill inside it — to *height*.
+
+        Animated or not, the resize is applied explicitly: on Windows a
+        frameless translucent top-level window does not reliably follow
+        min/max-size constraint changes, which left the window (and with
+        it the stretched pill frame) stuck at the previous height, the
+        header floating in empty black space.  Every animation tick calls
+        :meth:`_resize_island` so the window and the pill track the
+        interpolated height, and the top edge stays anchored on screen.
+        """
+        if self._anim is not None:
+            self._anim.stop()
+            self._anim.deleteLater()
+            self._anim = None
 
         if not animate:
-            self.setFixedHeight(height)
+            self._resize_island(height)
             return
 
-        group = QtCore.QParallelAnimationGroup(self)
-        for prop in (b"minimumHeight", b"maximumHeight"):
-            anim = QtCore.QPropertyAnimation(self, prop, self)
-            anim.setDuration(240)
-            anim.setEasingCurve(QtCore.QEasingCurve.Type.OutCubic)
-            anim.setStartValue(self.height())
-            anim.setEndValue(height)
-            group.addAnimation(anim)
-        group.finished.connect(group.deleteLater)
-        group.start(QtCore.QAbstractAnimation.DeletionPolicy.DeleteWhenStopped)
-        self._anim_group = group
+        anim = QtCore.QVariantAnimation(self)
+        anim.setDuration(240)
+        anim.setEasingCurve(QtCore.QEasingCurve.Type.OutCubic)
+        anim.setStartValue(self.height())
+        anim.setEndValue(height)
+        top_left = self.geometry().topLeft()  # anchor: the top edge must not drift
+
+        def _to(value) -> None:
+            self._resize_island(int(value), top_left)
+
+        def _finish() -> None:
+            # Snap to the exact target (the eased curve stops a fraction
+            # off) and release the animation object.
+            self._resize_island(height, top_left)
+            if self._anim is anim:
+                self._anim = None
+            anim.deleteLater()
+
+        anim.valueChanged.connect(_to)
+        anim.finished.connect(_finish)
+        self._anim = anim
+        anim.start()  # emits valueChanged immediately with the start value
 
     def set_expanded(self, expanded: bool, animate: bool = True) -> None:
-        """Expand or collapse the additional controls."""
+        """Expand or collapse the additional controls.
+
+        Every expansion — hover, manual toggle, or the restored launch
+        state — is treated alike: the island always auto-collapses when
+        the mouse leaves (see :meth:`_hover_collapse`), unless an input
+        has keyboard focus or the countdown is in its expiry alert.
+        """
         if expanded == self._expanded:
             return
         self._expanded = expanded
@@ -282,6 +381,56 @@ class IslandWindow(QtWidgets.QWidget):
         self.expand_button.setText("▴" if expanded else "▾")
         self._apply_geometry(target, animate)
         self._emit_settings()
+
+    # --- hover auto-expand / auto-collapse ----------------------------------
+
+    def enterEvent(self, event: QtCore.QEvent) -> None:
+        """Mouse (re-)entered the island: cancel any pending auto-collapse
+        and debounce an expansion of the compact pill."""
+        self._hover_collapse_timer.stop()
+        if (
+            not self._expanded
+            and self._drag_pos is None
+            and not self._hover_expand_timer.isActive()
+        ):
+            self._hover_expand_timer.start()
+        super().enterEvent(event)
+
+    def leaveEvent(self, event: QtCore.QEvent) -> None:
+        """Mouse left the island: cancel a pending expansion and start the
+        auto-collapse grace period (conditions checked when it fires)."""
+        self._hover_expand_timer.stop()
+        if self._expanded and not self._hover_collapse_timer.isActive():
+            self._hover_collapse_timer.start()
+        super().leaveEvent(event)
+
+    def _hover_expand(self) -> None:
+        """Hover debounce elapsed: expand — unless the state changed since
+        (collapsed manually, or a drag is in progress)."""
+        if self._expanded or self._drag_pos is not None:
+            return
+        self.set_expanded(True)
+
+    def _hover_collapse(self) -> None:
+        """Leave grace period elapsed: collapse the island back into the
+        slim bar — always, whatever started the expansion (hover, toggle,
+        or a restored launch state) — but only when it is really safe."""
+        if not self._expanded:
+            return
+        # A leave event can fire while the cursor is still visually inside
+        # the window (popups, event-delivery edge cases): never collapse
+        # under a cursor that is actually over the island.
+        if self.frameGeometry().contains(QtGui.QCursor.pos()):
+            return
+        # Typing comfort: keep the panel open while an input has keyboard
+        # focus, so a drifting cursor cannot interrupt the user.
+        if self.song_input.hasFocus() or self.minutes_input.hasFocus():
+            return
+        # The expiry notice requires explicit dismissal; hovering away must
+        # not hide it.
+        if self._timer.state is TimerState.EXPIRED:
+            return
+        self.set_expanded(False)
 
     # --- state ---------------------------------------------------------------
 
@@ -463,6 +612,10 @@ class IslandWindow(QtWidgets.QWidget):
 
     def mousePressEvent(self, event: QtGui.QMouseEvent) -> None:
         if event.button() == QtCore.Qt.MouseButton.LeftButton:
+            # Drag guard: a press that starts a window drag cancels the
+            # pending hover expansion, so dragging the compact pill never
+            # expands it mid-drag.
+            self._hover_expand_timer.stop()
             self._drag_pos = event.globalPosition().toPoint() - self.frameGeometry().topLeft()
         super().mousePressEvent(event)
 
@@ -476,6 +629,8 @@ class IslandWindow(QtWidgets.QWidget):
         super().mouseReleaseEvent(event)
 
     def closeEvent(self, event: QtGui.QCloseEvent) -> None:
+        self._hover_expand_timer.stop()
+        self._hover_collapse_timer.stop()
         self._timer.cancel()
         self._emit_settings()
         super().closeEvent(event)

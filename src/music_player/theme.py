@@ -16,6 +16,8 @@ ACCENT = "#0a84ff"       # Apple system blue
 ACCENT_HOVER = "#409cff"
 SUCCESS = "#30d158"
 DANGER = "#ff453a"
+#: Soft red used to highlight the corner close button on hover.
+CLOSE_HOVER = "#E11D48"
 
 #: Rounded-corner radius for the island and inner widgets (px).
 RADIUS = 22
@@ -109,6 +111,23 @@ QPushButton#expandButton {{
 QPushButton#expandButton:hover {{
     background: {BG_RAISED};
     color: {TEXT};
+}}
+QPushButton#closeButton {{
+    background: transparent;
+    color: {TEXT_DIM};
+    border: none;
+    border-radius: 11px;
+    padding: 0;
+    font-size: 12px;
+    font-weight: 600;
+}}
+QPushButton#closeButton:hover {{
+    background: {CLOSE_HOVER};
+    color: #ffffff;
+}}
+QPushButton#closeButton:pressed {{
+    background: {CLOSE_HOVER};
+    color: #ffffff;
 }}
 QPushButton#ghostButton {{
     background: transparent;

@@ -75,12 +75,18 @@ From source:
 ```powershell
 python main.py            # normal launch
 python main.py --smoke    # automated check: window opens, closes after 4 s
-pytest                    # run the test suite (170 tests)
+pytest                    # run the test suite (184 tests)
 ```
 
 ## Usage
 
 - The pill floats top-center and always stays on top; drag it anywhere.
+- **Hovering the compact pill expands it automatically** (150 ms debounce);
+  moving the mouse away always collapses it back into the slim bar after
+  a short grace period — whatever started the expansion (hover, the **▾**
+  toggle, or a restored launch state). The panel stays open only while
+  you are typing in an input or while the expiry alert waits for explicit
+  dismissal. The **▾** toggle always works on demand too.
 - Click **▾** to expand: enter a song name, a duration in minutes, press
   **Start** (or press Enter in the song field).
 - The pill shows the remaining time; **⏸** pauses/resumes the countdown
@@ -94,6 +100,7 @@ pytest                    # run the test suite (170 tests)
   off by default; ticking it writes exactly one value under your
   `HKCU\...\CurrentVersion\Run` key, and unticking it removes only that
   value. No services, no scheduled tasks, no machine-wide changes.
+- The small **✕** in the pill's corner closes the app cleanly (exit code 0).
 - Closing the window exits the process — no tray icon, no background
   process is left behind, and no other application (Brave, your player)
   is ever closed by the app.
@@ -204,7 +211,7 @@ src/music_player/
   media_control.py          Windows GSMTC media-session control
   youtube.py                YouTube fallback: first result + Brave integration
   startup.py                optional HKCU Run registration (opt-in)
-tests/                      pytest suite (170 tests)
+tests/                      pytest suite (184 tests)
 scripts/
   smoke_launch.py           quick launch/exit check
   probe_media_sessions.py   list current Windows media sessions
@@ -217,7 +224,7 @@ scripts/
 
 ## Verification summary
 
-- 170 automated tests, all passing (`pytest`).
+- 184 automated tests, all passing (`pytest`).
 - Live, non-image verification performed during development:
   local search against the real Music folder; GSMTC pause/resume against
   PotPlayer and Microsoft Media Player; Brave tab opening + same-session
